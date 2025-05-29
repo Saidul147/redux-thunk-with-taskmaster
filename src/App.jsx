@@ -4,7 +4,7 @@ import MainLayout from './components/layouts/MainLayout';
 function App() {
   return (
     <>
-      <Toaster />
+      {/* <Toaster position='top-right'/> */}
       <MainLayout />
     </>
   );

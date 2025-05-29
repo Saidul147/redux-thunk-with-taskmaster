@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import loginImage from '../assets/image/login.svg';
 import { useForm, useWatch } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { NavLink, useNavigate, } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { createUser } from '../redux/features/user/userSlice';
 
 const Signup = () => {
@@ -33,8 +33,17 @@ const Signup = () => {
     dispatch(createUser({
         name,email,password
     }))
-    console.log(name, email, password);
+    //to create a new user you have to pass email and password, mandetory.
+    //name cant set directly,for a create a user, so it has to need to call updateProfile() and then set there name as a displayname. 
   };
+
+  const {email} = useSelector((state) => state.userSlice)
+
+ useEffect(() => {
+    if (email) {
+      navigate('/'); // or whatever your target screen name is
+    }
+  }, [email]);
 
   const handleGoogleLogin = () => {
     // Google Login

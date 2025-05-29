@@ -3,17 +3,39 @@ import { useNavigate } from 'react-router-dom';
 import loginImage from '../assets/image/login.svg';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../utils/firebase.config';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../redux/features/user/userSlice';
+import { useEffect } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+
 const Login = () => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const googleProvider = new GoogleAuthProvider()
 
+  const dispatch = useDispatch()
+
   const onSubmit = ({ email, password }) => {
     // Email Password Login
+
+   dispatch(loginUser({email,password}))
 
     console.log(email, password);
   };
 
+  const {email,isError,error} = useSelector((state) => state.userSlice)
+  console.log(error)
+  useEffect(()=>{
+    if(email){
+      toast.success("Login Success")
+      localStorage.setItem("login",true)
+      setTimeout(()=>{
+        navigate("/")
+      },500)
+    }else if(error){
+      toast.error("Login failed")
+    }
+  },[email,error])
 
   const handleGoogleLogin = () => {
     // signInWithPopup(auth,googleProvider)
@@ -75,6 +97,7 @@ const Login = () => {
           </form>
         </div>
       </div>
+      <Toaster position='top-right'  />
     </div>
   );
 };
